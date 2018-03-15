@@ -1,20 +1,20 @@
 clear 
 img = imread('69020.jpg');
-img = im2single(img);
+img = im2double(img);
 
 [n, d, r] = size(img);
 img = reshape(img, [n*d r]);
 img = reshape(img, [n*d r]);
 [n, d] = size(img);
+x = img;
 k =2;
-eps = 0.01;
+eps = 0.001;
 mu = img(randsample(n, k), :);
 sigma = repmat(eye(d), [1, 1, k]);
-r = rand(n, k);
+r = zeros(n, k);
 w = repmat(1/k, [1, k]);
 
 LLds = [];
-x = img;
 max_iters = 5;
 
 while size(LLds, 1) < max_iters
@@ -33,21 +33,21 @@ while size(LLds, 1) < max_iters
         mu(j, :)= 1./nks(j) * sum(x .* r(:,j), 1);
         x_mu = x - mu(j, :);
         sigma(:,:,j) = 1./nks(j) * ((x_mu .* r(:,j))'*x_mu);
-        w(k) = 1. / n * nks(k);
+        w(j) = 1. / n * nks(j);
     end
     
 end
-
-    if size(LLds, 1) < 2
-        continue
-    end
-    
-    if abs(lld - LLds(end - 2) < eps)
-        break
-    end
-end
-
-    
-    
-            
+% 
+%     if size(LLds, 1) < 2
+%         continue
+%     end
+%     
+%     if abs(lld - LLds(end - 2) < eps)
+%         break
+%     end
+% end
+% 
+%     
+%     
+%             
     
